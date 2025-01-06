@@ -1,10 +1,28 @@
+
+# requests lets us call other modules
 import requests
 
-def make_url(year, month):
+
+# function requires a spicified date and year.
+
+def make_url(month, year):
+
+    # puts the month and year into completed url and grabs it from NYT
     url =  f'https://api.nytimes.com/svc/archive/v1/{year}/{month}.json?api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
     response = requests.get(url)
 
+
+    # checks if we got the data
     if response.status_code == 200:
-        print("we chillin")
+        
+        #creates a dicitonary out of the completed data.
+        data = response.json()
+
+        #sends a silly confirmation
+        print(f"We chillin... We got the data on {month}/{year}...")
+        return data
+
     else:
+
+        #prints status code if we don't have the data
         print(f"No data; {response.status_code}")
