@@ -9,7 +9,7 @@ import requests
 
 # function requires a spicified date and year.
 
-def make_url(month, year):
+def make_url(month: int, year: int) -> list:
 
     # puts the month and year into completed url and grabs it from NYT
     url =  f'https://api.nytimes.com/svc/archive/v1/{year}/{month}.json?api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
@@ -30,4 +30,6 @@ def make_url(month, year):
     else:
 
         #prints status code if we don't have the data
-        print(f"No data;\n{response.status_code}")
+        print(f"No data for {month}/{year};\n{response.status_code}")
+
+

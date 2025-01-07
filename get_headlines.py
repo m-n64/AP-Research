@@ -2,7 +2,7 @@ import get_data
 
 archive = get_data.make_url(11,1961)
 
-def get_headlines(data):
+def get_headlines(data: list):
 
     for article in range(len(data)):
 
@@ -13,7 +13,7 @@ def get_headlines(data):
 get_headlines(archive)
 
 
-def get_headline(data, article):
+def get_headline(data: list, article: int) -> str:
     return f"----------\n{data[article]["headline"]["main"]}\n{data[article]["snippet"]}\n----------"
 
 

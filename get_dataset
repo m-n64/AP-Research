@@ -1,0 +1,17 @@
+import get_data
+import get_months
+import top10
+
+
+#gets the range of months to pull from
+time_period = get_months.get_months([11, 1961], [8, 1973])
+
+
+#does this for every month
+
+for date in time_period:
+    month_data = get_data.make_url(date[0], date[1])
+
+    top10.top_10()
+
+

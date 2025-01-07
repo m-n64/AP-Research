@@ -11,7 +11,7 @@ archive = get_data.make_url(11, 1961)
 
  
 
-def word_count(data): 
+def word_count(data: list) -> dict: 
     
     #create an empty dictionary
     word_count = {}
@@ -39,7 +39,7 @@ def word_count(data):
     return word_count
 
 
-def top_10(data):
+def top_10(data: list) -> list:
     
     max = 1
 
