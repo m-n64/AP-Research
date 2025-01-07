@@ -11,7 +11,7 @@ time_period = get_months.get_months([11, 1961], [8, 1973])
 
 for date in time_period:
     month_data = get_data.make_url(date[0], date[1])
-
-    top10.top_10()
+    list = top10.top10(top10.word_count(month_data))
+    print(list)
 
 
