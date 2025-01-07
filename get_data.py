@@ -20,7 +20,7 @@ def make_url(month, year):
     if response.status_code == 200:
         
         #creates a dicitonary out of the completed data.
-        data = response.json()
+        data = response.json()["response"]["docs"]
 
         #sends a silly confirmation
         print(f"We chillin... We got the data on {month}/{year}...")
@@ -31,20 +31,3 @@ def make_url(month, year):
 
         #prints status code if we don't have the data
         print(f"No data;\n{response.status_code}")
-
-
-def get_headlines(month, year):
-
-    headlines = []
-
-    news_data = make_url(month, year)
-
-    for i in range(len(news_data["response"]["docs"])):
-
-        headlines.append(news_data["response"]["docs"][i]["headline"]["main"])
-
-        print(f"{i + 1} --- {headlines[-1]}")
-        i += 1
-
-    return headlines
-
