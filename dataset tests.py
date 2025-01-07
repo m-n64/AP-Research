@@ -2,6 +2,10 @@
 # requests lets us call other modules
 import requests
 
+# month = input("say the month (MM): ")
+
+# year = input("say the year (YYYY): ")
+
 
 # function requires a spicified date and year.
 
@@ -21,8 +25,26 @@ def make_url(month, year):
         #sends a silly confirmation
         print(f"We chillin... We got the data on {month}/{year}...")
         return data
+        # return data
 
     else:
 
         #prints status code if we don't have the data
-        print(f"No data; {response.status_code}")
+        print(f"No data;\n{response.status_code}")
+
+
+def get_headlines(month, year):
+
+    headlines = []
+
+    news_data = make_url(month, year)
+
+    for i in range(len(news_data["response"]["docs"])):
+
+        headlines.append(news_data["response"]["docs"][i]["headline"]["main"])
+
+        print(f"{i + 1} --- {headlines[-1]}")
+        i += 1
+
+    return headlines
+
