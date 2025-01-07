@@ -16,22 +16,21 @@ def word_count(data: list) -> dict:
     #create an empty dictionary
     word_count = {}
 
-    for article in range(len(data)):
+    for article in data:
 
         # go to every article
-        for i in range(len(data[article]["keywords"])):
+        for i in range(len(article["keywords"])):
 
-            keyword = data[article]["keywords"][i]["value"]
+            keyword = article["keywords"][i]["value"]
 
             # if keyword is in the dictionary, add a point, otherwise, add it to the dictionary
             if keyword in word_count:
-                word_count[keyword] += len(data[article]["keywords"]) - i
+                word_count[keyword] += len(article["keywords"]) - i
             else:
                 word_count[keyword] = 1
 
             i += 1
 
-        article += 1
 
     # for i in word_count:
     #     print(f"{i} - {word_count[i]}")

@@ -48,7 +48,7 @@ def get_months(start: list, end: list) -> list:
     return list
 
 
-# data = get_months([11, 1961], [8, 1973])
+data = get_months([11, 1961], [8, 1973])
 
-# for i in data:
-#     print(data)
+for i in data:
+    print(data)

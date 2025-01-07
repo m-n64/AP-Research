@@ -10,8 +10,12 @@ time_period = get_months.get_months([11, 1961], [8, 1973])
 #does this for every month
 
 for date in time_period:
-    month_data = get_data.make_url(date[0], date[1])
-    list = top10.top10(top10.word_count(month_data))
-    print(list)
+
+    try: 
+        month_data = get_data.make_url(date[0], date[1])
+        list = top10.top_10(top10.word_count(month_data))
+        print(list)
+    except TypeError:
+        pass
 
 
