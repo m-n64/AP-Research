@@ -11,3 +11,10 @@ def get_headlines(data):
         print("----------------------")
 
 get_headlines(archive)
+
+
+def get_headline(data, article):
+    return f"----------\n{data[article]["headline"]["main"]}\n{data[article]["snippet"]}\n----------"
+
+
+get_headline(archive, 35)
