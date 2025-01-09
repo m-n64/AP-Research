@@ -1,57 +1,43 @@
 import requests
 
 
+dates = {
+    "start ": {"month": 11, "year": 1961},
+    "end" : {"month": 8,"year": 1973}
 
-def get_data(year: int, start_day: str, end_day: str) -> list:
-    try:
-        url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date={year}{start_day}&end_date={year}{end_day}&fq=print_page:1print_page:1 AND (print_section:("A", "1") OR (!_exists_:print_section))&sort=oldest&api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
-        response = requests.get(url)
-        print(response)
+}
+
+
+def get_data(year: int, start_month, end_month) -> list:
+    url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date={year}{start_month}01&end_date={year}{end_month}31&fq=print_page:1 AND (print_section:("A", "1") OR (!_exists_:print_section))&api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
+    response = requests.get(url)
+    print(response)
+    if response.status_code == 200:
+
         print(f'hits: {response.json()["response"]["meta"]["hits"]}')
+        print(response.json()["response"]["docs"])
         return response.json()["response"]["docs"]
-    except KeyError:
-        if response.status_code == 429:
-            print("Too many requests...")
-
-
-
-
-def make_list(start_day: str, start_year: int, end_day: str, end_year: int):
-
-    year = start_year
-
-    while year <= end_year:
-        if year == start_year:
-
-            get_data(year, start_day, "1231")
-
-        elif year == end_year:
+    
+    elif response.status_code == 400:
+        print("Bad request... Retrying...")
+        
+        if (type(start_month) == int) and start_month < 10:
             
-            get_data(year, "0101", end_day)
+            start_month = "0" + str(start_month)
+            get_data(year, start_month, end_month)
 
+        elif (type(end_month) == int) and end_month < 10:
+            
+            end_month = "0" + str(end_month)
+            get_data(year, start_month, end_month)
+        
         else:
-            get_data(year, "0101", "1231")
+            print(f"Undefined Error...\nstart month:{start_month}\nend month: {end_month}\nurl:{url}")
+
+    elif response.status_code == 429:
+        print("Too many requests...")
+
+    
 
 
-
-        check = input("Continue? (Y/N): ")
-
-        if (check == "Y") or (check == "y"):
-            year += 1
-        elif (check == "N") or (check == "n"):
-            break
-        else:
-            check = input("Y/N? ")
-
-
-# make_list("1101", 1961, "0831", 1973)
-
-get_data()
-
-# for article in archive:
-#     try:
-#         print(f'{article["pub_date"]}:\nheadlines: {article["headline"]["main"]}\nkeyword: {article["keywords"][0]["value"]}\n----------')
-#     except IndexError:
-#         print(f'{article["pub_date"]}:\nheadlines: {article["headline"]["main"]}\nkeyword: N/A\n----------')
-
-
+get_data(dates["end"]["year"], "01", dates["end"]["month"])
