@@ -61,6 +61,3 @@ for i in (dates := get_months([11, 1961], [8, 1973])):
         break
     else:
         check = input("continue? (y/n) ")
-
-collect_data(11, 1961)
-
