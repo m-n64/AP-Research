@@ -647,7 +647,7 @@ definitions:
       print_headline:
         type: string
       name:
-        type: string
+        type: string  
       seo:
         type: string
       sub:

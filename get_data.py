@@ -26,7 +26,7 @@ def make_url(month: int, year: int) -> list:
         print(f"We chillin... We got the data on {month}/{year}...")
         return data
         # return data
-
+    
     else:
 
         #prints status code if we don't have the data

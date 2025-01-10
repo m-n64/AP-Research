@@ -15,7 +15,7 @@ def get_data(year: int, start_month, end_month) -> list:
     if response.status_code == 200:
 
         print(f'hits: {response.json()["response"]["meta"]["hits"]}')
-        print(response.json()["response"]["docs"])
+        # print(response.json()["response"]["docs"])
         return response.json()["response"]["docs"]
     
     elif response.status_code == 400:
@@ -40,4 +40,4 @@ def get_data(year: int, start_month, end_month) -> list:
     
 
 
-get_data(dates["end"]["year"], "01", dates["end"]["month"])
+# get_data(dates["end"]["year"], "01", dates["end"]["month"])
