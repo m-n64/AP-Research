@@ -1,28 +1,66 @@
 import requests
 
+import archive
 import article_search
 from get_months import get_months
 
-dates = get_months([11, 1961], [8, 1973])
 
 
-dataset = {}
+def collect_data(month, year) -> dict:
 
-# for i in dates:
+    try:
+        info = article_search.get_data(month, article_search.check_days(month, year), year)
+        month_data = []
 
-
-#     month = i[0]
-#     year = i[1]
-#     archive = article_search.get_data(year, month, month)
-
-#     dataset[f"{month}/{year}"]["headline"] = 
-#     dataset[f"{month}/{year}"]["snippet"] = 
-#     dataset[f"{month}/{year}"]["keywords"] = 
+        print(f"{month}/{year}:")
 
 
-# print(article_search.get_data(1961, 11, 12))
+        for i in info:
+            article_data =  {}
+            article_data["headline"] = i["headline"]["main"]
+            article_data["pub_date"] = i["pub_date"]
+            article_data["abstract"] = i["abstract"]
+
+            article_data["keywords"] = []
+
+            for keyword in i["keywords"]:
+                article_data["keywords"].append(keyword["value"])
+            
+            month_data.append(article_data)
+            
+            print("------")
+            print(f'Published: {article_data["pub_date"]}')
+            print(f'Headline: {article_data["headline"]}')
+            print(f'Abstract: {article_data["abstract"]}')
+            print(f'Keywords: {article_data["keywords"]}')
+            
+        return month_data
+    except TypeError:
+        return "N/a"
+     
+    
 
 
-url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=19611101&end_date=19611130&fq=print_page:1 AND (print_section:("A", "1") OR (!_exists_:print_section))&api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
-response = requests.get(url)
-print(response.json())
+
+
+file = {}
+
+
+for i in (dates := get_months([11, 1961], [8, 1973])):
+
+    month = i[0]
+    year = i[1]
+    
+
+    file[f"{month}/{year}"] = collect_data(month, year)
+
+
+    if (check := input("continue? (y/n) ")) == "y":
+        pass
+    elif check == "n":
+        break
+    else:
+        check = input("continue? (y/n) ")
+
+collect_data(11, 1961)
+

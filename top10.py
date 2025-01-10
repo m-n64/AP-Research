@@ -1,10 +1,10 @@
-import get_data
+import archive
 
 
 
 
 #gets data from a given month
-archive = get_data.make_url(11, 1961)
+archive = archive.make_url(11, 1961)
 
 
 

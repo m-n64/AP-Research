@@ -1,6 +1,6 @@
-import get_data
+import archive
 
-archive = get_data.make_url(11,1961)
+archive = archive.make_url(11,1961)
 
 def get_headlines(data: list):
 

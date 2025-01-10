@@ -8,36 +8,49 @@ dates = {
 }
 
 
-def get_data(year: int, start_month, end_month) -> list:
-    url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date={year}{start_month}01&end_date={year}{end_month}31&fq=print_page:1 AND (print_section:("A", "1") OR (!_exists_:print_section))&api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
+def get_data(month, days, year: int) -> list:
+
+    url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date={year}{month}01&end_date={year}{month}{days}&fq=print_page:1 AND (print_section:("A", "1") OR (!_exists_:print_section))&api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
+        
     response = requests.get(url)
     print(response)
     if response.status_code == 200:
 
         print(f'hits: {response.json()["response"]["meta"]["hits"]}')
+        print(f'We did it... We got the data from {month}/1/{year}, to {month}/{days}/{year}...')
+        print("------------------")
         # print(response.json()["response"]["docs"])
         return response.json()["response"]["docs"]
     
     elif response.status_code == 400:
         print("Bad request... Retrying...")
         
-        if (type(start_month) == int) and start_month < 10:
+        if (type(month) == int) and month < 10:
             
-            start_month = "0" + str(start_month)
-            get_data(year, start_month, end_month)
-
-        elif (type(end_month) == int) and end_month < 10:
-            
-            end_month = "0" + str(end_month)
-            get_data(year, start_month, end_month)
+            month = "0" + str(month)
+            get_data(month, days, year)
         
         else:
-            print(f"Undefined Error...\nstart month:{start_month}\nend month: {end_month}\nurl:{url}")
+            print(f"Undefined Error...\nmonth:{month}\nurl:{url}")
 
     elif response.status_code == 429:
         print("Too many requests...")
 
     
+def check_days(month, year):
+
+    odd_months = [1, 3, 5, 7, 8, 10, 12]
+
+    if month in odd_months:
+        return 31
+    elif month == 2:
+        if year % 4 == 0:
+            return 29
+        else:
+            return 28
+    else:
+        return 30
+
 
 
 # get_data(dates["end"]["year"], "01", dates["end"]["month"])

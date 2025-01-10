@@ -1,4 +1,4 @@
-import get_data
+import archive
 import get_months
 import top10
 
@@ -12,7 +12,7 @@ time_period = get_months.get_months([11, 1961], [8, 1973])
 for date in time_period:
 
     try: 
-        month_data = get_data.make_url(date[0], date[1])
+        month_data = archive.make_url(date[0], date[1])
         list = top10.top_10(top10.word_count(month_data))
         print(list)
     except TypeError:
