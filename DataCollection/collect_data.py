@@ -1,9 +1,10 @@
 import requests
 import sys
 
-sys.path.append("./API")
+sys.path.append("../AP-Research")
+from API import archive, article_search
+from ClassSystem.article_classes import Article
 
-from API import archive, article_search;
 
 from get_months import get_months
 
@@ -20,23 +21,19 @@ def collect_data(month, year) -> dict:
 
 
         for i in info:
-            article_data =  {}
-            article_data["headline"] = i["headline"]["main"]
-            article_data["pub_date"] = i["pub_date"]
-            article_data["abstract"] = i["abstract"]
+            article_data =  Article(month, year)
+            article_data.headline = i["headline"]["main"]
+            article_data.published = i["pub_date"]
+            article_data.abstract = i["abstract"]
 
-            article_data["keywords"] = []
+            article_data.keywords = []
 
             for keyword in i["keywords"]:
-                article_data["keywords"].append(keyword["value"])
+                article_data.keywords.append(keyword["value"])
             
             month_data.append(article_data)
-            
             print("------")
-            print(f'Published: {article_data["pub_date"]}')
-            print(f'Headline: {article_data["headline"]}')
-            print(f'Abstract: {article_data["abstract"]}')
-            print(f'Keywords: {article_data["keywords"]}')
+            article_data.rundown()
             
         return month_data
     except TypeError:

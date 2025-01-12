@@ -36,21 +36,6 @@ def get_data(month, days, year: int) -> list:
     elif response.status_code == 429:
         print("Too many requests...")
 
-    
-def check_days(month, year):
-
-    odd_months = [1, 3, 5, 7, 8, 10, 12]
-
-    if month in odd_months:
-        return 31
-    elif month == 2:
-        if year % 4 == 0:
-            return 29
-        else:
-            return 28
-    else:
-        return 30
-
 
 
 # get_data(dates["end"]["year"], "01", dates["end"]["month"])
