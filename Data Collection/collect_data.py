@@ -1,7 +1,10 @@
 import requests
+import sys
 
-import archive
-import article_search
+sys.path.append("./API")
+
+from API import archive, article_search;
+
 from get_months import get_months
 
 

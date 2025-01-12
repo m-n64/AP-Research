@@ -1,6 +1,11 @@
-import archive
 
 
+import sys
+
+sys.path.append("./API")
+
+
+from API import archive
 
 
 #gets data from a given month
