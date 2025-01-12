@@ -2,10 +2,6 @@
 # requests lets us call other modules
 import requests
 
-# month = input("say the month (MM): ")
-
-# year = input("say the year (YYYY): ")
-
 
 # function requires a spicified date and year.
 
@@ -31,5 +27,14 @@ def get_data(month, year: int) -> list:
 
         #prints status code if we don't have the data
         print(f"No data for {month}/{year};\n{response.status_code}")
+
+
+if __name__ == "__main__":
+    
+    month = input("say the month (MM): ")
+    year = input("say the year (YYYY): ")
+
+    print(get_data(month, year))
+
 
 

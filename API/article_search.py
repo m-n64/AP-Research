@@ -1,16 +1,13 @@
 import requests
 
-
-dates = {
-    "start ": {"month": 11, "year": 1961},
-    "end" : {"month": 8,"year": 1973}
-
-}
+import sys
 
 
-def article_search(month, days: int, year: int, url: str) -> list:
 
-    # url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date={year}{month}01&end_date={year}{month}{days}&fq=print_page:1 AND (print_section:("A", "1") OR (!_exists_:print_section))&api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
+
+def article_search(month, days: int, year: int) -> list:
+
+    url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date={year}{month}01&end_date={year}{month}{days}&fq=print_page:1 AND (print_section:("A", "1") OR (!_exists_:print_section))&api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
         
     response = requests.get(url)
     print(response)
@@ -18,8 +15,10 @@ def article_search(month, days: int, year: int, url: str) -> list:
 
         print(f'hits: {response.json()["response"]["meta"]["hits"]}')
         print(f'We did it... We got the data from {month}/1/{year}, to {month}/{days}/{year}...')
-        print("------------------")
-        # print(response.json()["response"]["docs"])
+        print("------------------") 
+        
+
+        # print(response.json()["response"]["docs"]) if 
         return response.json()["response"]["docs"]
     
     elif response.status_code == 400:
@@ -35,7 +34,16 @@ def article_search(month, days: int, year: int, url: str) -> list:
 
     elif response.status_code == 429:
         print("Too many requests...")
+        return response.status_code
 
 
 
-# get_data(dates["end"]["year"], "01", dates["end"]["month"])
+if __name__ == "__main__":
+
+    dates = {
+    "start ": {"month": 11, "year": 1961},
+    "end" : {"month": 8,"year": 1973}
+
+    }
+       
+    article_search(dates["end"]["year"], "01", dates["end"]["month"])

@@ -1,12 +1,36 @@
 
 import sys
 import requests
-from article_classes import Article
 
 sys.path.append("../AP-Research")
 
 from API.article_search import article_search
 from DataCollection.filter_data import filter_data
+
+
+class Article:
+
+    def __init__(self, month, year):
+        self.headline = "None"
+        self.abstract = "None"
+        self.published = "Unknown"
+        self.month = month
+        self.year = year
+        self.keywords = "Unknown"
+        self.url = ""
+        self.date = f'{self.month}/{self.year}'
+
+
+
+
+    def rundown(self):
+        print(f'Published: {self.published}')
+        print(f'Headline: {self.headline}')
+        print(f'Abstract: {self.abstract}')
+        print(f'Keywords: {self.keywords}')
+        print(f'Link: {self.url}')
+
+
 
 class Month:
 
@@ -26,12 +50,16 @@ class Month:
         else:
             self.days = 30
 
-        self.url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date={year}{month}01&end_date={year}{month}{self.days}&fq=print_page:1 AND (print_section:("A", "1") OR (!_exists_:print_section))&api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
         self.date = f'{self.month}/{self.year}'
         self.results = 0
-        self.article_list = "N/a"
-
-
+        
+        info =  article_search(self.month, self.days, self.year)
+        self.article_list = filter_data(self.month, self.year, info)
+        
+        if info == 429:
+            self.response = 429
+        else:
+            self.response = 200
 
         
 
@@ -41,14 +69,7 @@ class Month:
         print(f'Results: {self.results}')
         print("----")
         print(f'Article List:')
-        print(self.article_list)
-
-
-
-    def create_list(self):
-        info =  article_search(self.month, self.days, self.year, self.url)
-        self.article_list = filter_data(self.month, self.year, info)
-        
+        print(self.article_list)        
 
 
 
