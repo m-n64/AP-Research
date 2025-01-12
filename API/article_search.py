@@ -8,9 +8,9 @@ dates = {
 }
 
 
-def get_data(month, days, year: int) -> list:
+def article_search(month, days: int, year: int, url: str) -> list:
 
-    url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date={year}{month}01&end_date={year}{month}{days}&fq=print_page:1 AND (print_section:("A", "1") OR (!_exists_:print_section))&api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
+    # url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date={year}{month}01&end_date={year}{month}{days}&fq=print_page:1 AND (print_section:("A", "1") OR (!_exists_:print_section))&api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
         
     response = requests.get(url)
     print(response)
@@ -28,7 +28,7 @@ def get_data(month, days, year: int) -> list:
         if (type(month) == int) and month < 10:
             
             month = "0" + str(month)
-            get_data(month, days, year)
+            article_search(month, days, year)
         
         else:
             print(f"Undefined Error...\nmonth:{month}\nurl:{url}")

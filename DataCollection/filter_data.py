@@ -9,12 +9,11 @@ from ClassSystem.article_classes import Article
 from get_months import get_months
 
 
-def collect_data(month, year) -> dict:
+def filter_data(month, year, info) -> dict:
 
     try:
 
         #get the data from the specific month. first input the month, then input the amount of days (based on month and if it is a leap year), then input the year
-        info = article_search.get_data(month, article_search.check_days(month, year), year)
         month_data = []
 
         print(f"{month}/{year}:")
@@ -53,7 +52,7 @@ for i in (dates := get_months([11, 1961], [8, 1973])):
     year = i[1]
     
 
-    file[f"{month}/{year}"] = collect_data(month, year)
+    file[f"{month}/{year}"] = filter_data(month, year)
 
 
     if (check := input("continue? (y/n) ")) == "y":
