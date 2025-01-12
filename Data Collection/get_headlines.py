@@ -1,4 +1,9 @@
-import archive
+
+import sys
+
+sys.path.append("./API")
+
+from API import archive
 
 archive = archive.make_url(11,1961)
 
