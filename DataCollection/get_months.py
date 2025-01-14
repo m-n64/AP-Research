@@ -27,10 +27,8 @@ def get_months(start_month: int, start_year: int, end_month: int, end_year: int)
                 #change to the next month
                 month += 1
             
-            #reset to January and go to the next year
+            #reset to January
             month = 1
-            year += 1
-
         # if it is 1973 (end_year <= 1973)
         else:
             while month <= end_month:
@@ -41,7 +39,7 @@ def get_months(start_month: int, start_year: int, end_month: int, end_year: int)
                 #change to the next month
                 month += 1
         
-        # end script
+        # go to the next year
         year += 1
 
     return list
@@ -52,4 +50,4 @@ if __name__ == "__main__":
     data = get_months(11, 1961, 8, 1973)
 
     for i in data:
-        print(data)
+        print(i)

@@ -3,16 +3,34 @@ import sys
 
 sys.path.append("../AP-Research")
 from API import archive, article_search
-from ClassSystem import classes
-from Convinience.loop_buffer import validate
+from Convenience.loop_buffer import validate
+
+from DataCollection.get_months import get_months
 
 
-from get_months import get_months
+class Article:
 
-if __name__ == "__main__":
-    is_displaying = True
-else:
-    is_displaying = False
+    def __init__(self, month, year):
+        
+        self.date = f'TBD'
+        self.headline = "None"
+        self.abstract = "None"
+        self.published = "Unknown"
+        self.month = month
+        self.year = year
+        self.keywords = "Unknown"
+        self.url = ""
+
+
+
+
+    def rundown(self):
+        print(f'Published: {self.date}')
+        print(f'Headline: {self.headline}')
+        print(f'Abstract: {self.abstract}')
+        print(f'Keywords: {self.keywords}')
+        print(f'Link: {self.url}')
+
 
 
 def filter_data(month, year, info) -> dict:
@@ -25,12 +43,13 @@ def filter_data(month, year, info) -> dict:
 
 
 
-        if is_displaying: print(f"{month}/{year}:") 
+        if __name__ == "__main__": print(f"{month}/{year}:") 
 
         for i in info:
-            article_data =  classes.Article(month, year)
+            article_data =  Article(month, year)
             article_data.headline = i["headline"]["main"]
             article_data.published = i["pub_date"]
+            article_data.date = i["pub_date"].split("T")[0]
             article_data.abstract = i["abstract"]
             article_data.url = i["web_url"]
             article_data.keywords = []
@@ -39,7 +58,7 @@ def filter_data(month, year, info) -> dict:
                 article_data.keywords.append(keyword["value"])
             
             month_data.append(article_data)
-            if is_displaying:
+            if __name__ == "__main__":
                 print("------")
                 article_data.rundown()
             
