@@ -1,9 +1,9 @@
 
 import sys
 import requests
-from ClassSystem import article
 
-sys.path.append("../AP-Research")
+sys.path.append("C:/Users/retro/Documents/GitHub/AP-Research/NYT")
+from ClassSystem import article
 
 from API.article_search import article_search
 
@@ -29,8 +29,7 @@ class Month:
 
         self.date = f'{self.month}/{self.year}'
         self.results = 0
-        
-        info, self.response =  article_search(self.month, self.days, self.year)
+        info =  article_search(self.month, self.days, self.year)
         self.article_list = article.filter_data(self.month, self.year, info)
         
 

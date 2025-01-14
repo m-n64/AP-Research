@@ -19,7 +19,7 @@ def article_search(month, days: int, year: int) -> list:
         
 
         # print(response.json()["response"]["docs"]) if 
-        return response.json()["response"]["docs"], response.status_code
+        return response.json()["response"]["docs"]
     
     elif response.status_code == 400:
         print("Bad request... Retrying...")
@@ -34,7 +34,7 @@ def article_search(month, days: int, year: int) -> list:
 
     elif response.status_code == 429:
         print("Too many requests...")
-        return "N/a", response.status_code
+        return response.status_code
 
 
 

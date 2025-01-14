@@ -1,7 +1,7 @@
 import requests
 import sys
 
-sys.path.append("../AP-Research")
+sys.path.append("C:/Users/retro/Documents/GitHub/AP-Research/NYT")
 from API import archive, article_search
 from Convenience.loop_buffer import validate
 
@@ -18,8 +18,8 @@ class Article:
         self.published = "Unknown"
         self.month = month
         self.year = year
-        self.keywords = "Unknown"
-        self.url = ""
+        self.keywords = "None"
+        self.url = "None"
 
 
 
@@ -48,8 +48,8 @@ def filter_data(month, year, info) -> dict:
         for i in info:
             article_data =  Article(month, year)
             article_data.headline = i["headline"]["main"]
-            article_data.published = i["pub_date"]
-            article_data.date = i["pub_date"].split("T")[0]
+            article_data.published = i["pub_date"].split("T")[0]
+            article_data.time = i["pub_date"].split("T")[1]
             article_data.abstract = i["abstract"]
             article_data.url = i["web_url"]
             article_data.keywords = []

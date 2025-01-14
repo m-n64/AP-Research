@@ -1,8 +1,10 @@
 import sys
 import requests
 import csv
-sys.path.append("../AP-Research")
+
+sys.path.append("C:/Users/retro/Documents/GitHub/AP-Research/NYT")
 from Convenience.loop_buffer import validate
+print(sys.path[-1])
 
 
 from get_months import get_months
@@ -21,7 +23,7 @@ def write_csv(timespan):
 
         for article in current_month.article_list:
             try:
-                writer.writerow([current_month.date, article.headline, article.abstract, article.keywords, article.url, article.date])
+                writer.writerow([current_month.date, article.headline, article.abstract, article.keywords, article.url, article.published, article.time])
             except AttributeError:
                 pass
                 # print(article)
@@ -46,16 +48,16 @@ if __name__ == "__main__":
 
     try:
  
-        with open("./test.csv", "x") as csvfile:
+        with open("article.csv", "x") as csvfile:
             writer = csv.writer(csvfile) 
-            writer.writerow(["Date", "Headline", "Abstract", "Keywords", "Link", "Publ."])
+            writer.writerow(["Date", "Headline", "Abstract", "Keywords", "Link", "Publ.", "Time"])
             write_csv(get_months(start_month, start_year, end_month, end_year))
 
     except FileExistsError:
 
         last_date = "N/a"
 
-        with open("./test.csv", "r") as csvfile:
+        with open("article.csv", "r") as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
                 try: 
@@ -76,7 +78,7 @@ if __name__ == "__main__":
 
         if (start_month != end_month) and (start_year != end_year):
 
-            with open("./test.csv", "a") as csvfile:
+            with open("article.csv", "a") as csvfile:
                 writer = csv.writer(csvfile) 
                 write_csv(get_months(start_month, start_year, end_month, end_year))
 
