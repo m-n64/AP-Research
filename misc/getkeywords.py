@@ -5,12 +5,12 @@ import sys
 sys.path.append("./API")
 
 from API import archive
-import get_months
+from get_months import get_months
 import top10
 
 
 #gets the range of months to pull from
-time_period = get_months.get_months([11, 1961], [8, 1973])
+time_period = get_months([11, 1961], [8, 1973])
 
 
 #does this for every month
