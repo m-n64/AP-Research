@@ -1,11 +1,8 @@
-import sys
 import requests
 import csv
+import os
 
-sys.path.append("C:/Users/retro/Documents/GitHub/AP-Research/NYT")
 from Convenience.loop_buffer import validate
-print(sys.path[-1])
-
 
 from get_months import get_months
 
@@ -19,11 +16,11 @@ def write_csv(timespan):
         year = date[1]
 
         current_month = Month(month, year)
-
-
+        writer.writerow([current_month.date, "-----", "-----", "-----", "-----", "-----", "-----"])
+        
         for article in current_month.article_list:
             try:
-                writer.writerow([current_month.date, article.headline, article.abstract, article.keywords, article.url, article.published, article.time])
+                writer.writerow(["-----", article.headline, article.abstract, article.keywords, article.url, article.published, article.time])
             except AttributeError:
                 pass
                 # print(article)
@@ -59,9 +56,19 @@ if __name__ == "__main__":
 
         with open("article.csv", "r") as csvfile:
             reader = csv.reader(csvfile)
-            for row in reader:
+            for row in reversed(reader):
                 try: 
-                    if row[0] != "Date": last_date = row[0]
+                    # if (row[0] != "Date") or (row[0]): last_date = row[0]
+                    print(f'Starting at {row[0]}')
+                    split_date = row[0].split("/")
+                    start_month = int(split_date[0]) + 1
+                    start_year = int(split_date[1])
+
+                    if start_month == 13:
+                        start_month = 1
+                        start_year += 1
+
+                                                
                 except IndexError:
                     pass
             

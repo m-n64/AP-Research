@@ -1,5 +1,4 @@
 
-
 def validate(message):
     check = input(message)
     if (check == "Y") or (check == "y"):
@@ -16,3 +15,4 @@ if __name__ == "__main__":
         print("Continuing")
     else:
         print("Cancelling")
+    

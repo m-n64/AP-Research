@@ -1,8 +1,6 @@
 
-import sys
 import requests
 
-sys.path.append("C:/Users/retro/Documents/GitHub/AP-Research/NYT")
 from ClassSystem import article
 
 from API.article_search import article_search

@@ -1,7 +1,5 @@
 import requests
-import sys
 
-sys.path.append("C:/Users/retro/Documents/GitHub/AP-Research/NYT")
 from API import archive, article_search
 from Convenience.loop_buffer import validate
 
