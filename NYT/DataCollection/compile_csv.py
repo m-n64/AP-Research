@@ -1,6 +1,10 @@
 import requests
 import csv
-import os
+
+from pathlib import Path
+import sys
+sys.path.append(str(Path(__file__).parent.parent))
+
 
 from Convenience.loop_buffer import validate
 
@@ -21,9 +25,8 @@ def write_csv(timespan):
         for article in current_month.article_list:
             try:
                 writer.writerow(["-----", article.headline, article.abstract, article.keywords, article.url, article.published, article.time])
-            except AttributeError:
-                pass
-                # print(article)
+            except AttributeError as a:
+                print(a)
         
 
         if date != timespan[-1]:
@@ -56,35 +59,29 @@ if __name__ == "__main__":
 
         with open("article.csv", "r") as csvfile:
             reader = csv.reader(csvfile)
-            for row in reversed(reader):
+            for row in reversed(list(reader)):
                 try: 
                     # if (row[0] != "Date") or (row[0]): last_date = row[0]
-                    print(f'Starting at {row[0]}')
                     split_date = row[0].split("/")
                     start_month = int(split_date[0]) + 1
                     start_year = int(split_date[1])
+                except ValueError:
+                    pass
+                except IndexError:
+                    pass
+                else:
 
                     if start_month == 13:
                         start_month = 1
                         start_year += 1
+                    
+                    break
 
-                                                
-                except IndexError:
-                    pass
-            
-        if last_date != "N/a":     
-            print(f'Starting at {last_date}')
-            split_date = last_date.split("/")
-
-            start_month = int(split_date[0]) + 1
-            start_year = int(split_date[1])
-
-            if start_month == 13:
-                start_month = 1
-                start_year += 1
+                    
 
         if (start_month != end_month) and (start_year != end_year):
-
+            
+            print(f'Starting at {start_month}/{start_year}')
             with open("article.csv", "a") as csvfile:
                 writer = csv.writer(csvfile) 
                 write_csv(get_months(start_month, start_year, end_month, end_year))

@@ -1,5 +1,9 @@
 
 import requests
+import sys
+
+from pathlib import Path
+sys.path.append(Path(__file__).resolve().parent.parent)
 
 from ClassSystem import article
 
