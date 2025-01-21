@@ -23,9 +23,10 @@ def write_csv(timespan):
         writer.writerow([current_month.date, "-----", "-----", "-----", "-----", "-----", "-----"])
         
         for article in current_month.article_list:
+            print(current_month.article_list)
             try:
                 writer.writerow(["-----", article.headline, article.abstract, article.keywords, article.url, article.published, article.time])
-            except AttributeError as a:
+            except Exception as a:
                 print(a)
         
 

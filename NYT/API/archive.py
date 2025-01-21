@@ -30,11 +30,8 @@ def get_data(month, year: int) -> list:
 
 
 if __name__ == "__main__":
-    
-    month = input("say the month (MM): ")
-    year = input("say the year (YYYY): ")
 
-    print(get_data(month, year))
+    print(get_data("01", 1961))
 
 
 

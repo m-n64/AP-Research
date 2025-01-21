@@ -19,7 +19,7 @@ def article_search(month, days: int, year: int) -> list:
         
 
         # print(response.json()["response"]["docs"]) if 
-        return response.json()["response"]["docs"]
+        return response.json()["response"]["docs"], response.status_code, response.json()["response"]["meta"]["hits"]
     
     elif response.status_code == 400:
         print("Bad request... Retrying...")
@@ -31,10 +31,11 @@ def article_search(month, days: int, year: int) -> list:
         
         else:
             print(f"Undefined Error...\nmonth:{month}\nurl:{url}")
+            return "", response.status_code, 0
 
     elif response.status_code == 429:
         print("Too many requests...")
-        return response.status_code
+        return "", response.status_code, 0
 
 
 
@@ -46,4 +47,4 @@ if __name__ == "__main__":
 
     }
        
-    article_search(dates["end"]["year"], "01", dates["end"]["month"])
+    print(article_search(1, 31, 1962))

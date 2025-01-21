@@ -30,9 +30,11 @@ class Month:
             self.days = 30
 
         self.date = f'{self.month}/{self.year}'
-        self.results = 0
-        info =  article_search(self.month, self.days, self.year)
-        self.article_list = article.filter_data(self.month, self.year, info)
+        try:
+            self.info, self.status, self.results =  article_search(self.month, self.days, self.year)
+        except TypeError:
+            self.info = article_search(self.month, self.days, self.year)
+        self.article_list = article.filter_data(self.month, self.year, self.info)
         
 
         
