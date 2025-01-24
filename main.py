@@ -2,9 +2,9 @@ import requests
 import json
 import os
 
-from get_months import get_months
-from loop_buffer import validate
-
+from Useful.get_months import get_months
+from Useful.loop_buffer import validate
+from Useful.check_history import check_history
 
 def archive(month: int, year: int):
     url = f'https://api.nytimes.com/svc/archive/v1/{year}/{month}.json?api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
@@ -30,11 +30,17 @@ def write(month: int, year: int, jsonFile: dict):
     with open(f'data/{year}/{month}-{year}.json', 'w') as f:
         json.dump(jsonFile, f) 
 
-sm = input('start month: ')
-sy = input('start year: ')
-
 
 if __name__ == '__main__':
+
+
+    sm, sy = check_history('data')
+    
+    if sm == None:
+        sm = input('start month: ')
+    if sy == None:
+        sy = input('start year: ')
+
     timespan = get_months(int(sm), int(sy), 8, 1973)
     print(f'getting data from {sm}/{sy} to 8/1973...')
     
