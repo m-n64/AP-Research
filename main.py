@@ -43,12 +43,11 @@ if __name__ == '__main__':
 
     timespan = get_months(int(sm) + 1, int(sy), 8, 1973)
     print(f'getting data from {int(sm) + 1}/{sy} to 8/1973...')
-    
+
+
     for date in timespan:
         status = archive(date[0], date[1])
-        if (status == 200) and (date[0] == 12):
-
-            print(f'----------\nGot the Data for {date[1]}...\n----------')
+        if (status == 200):            
             
             if validate('Continue?\ny/n: ') == True:
                 pass
