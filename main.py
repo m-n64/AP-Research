@@ -41,16 +41,19 @@ if __name__ == '__main__':
     if sy == None:
         sy = input('start year: ')
 
-    timespan = get_months(int(sm), int(sy), 8, 1973)
-    print(f'getting data from {sm}/{sy} to 8/1973...')
+    timespan = get_months(int(sm) + 1, int(sy), 8, 1973)
+    print(f'getting data from {int(sm) + 1}/{sy} to 8/1973...')
     
     for date in timespan:
         status = archive(date[0], date[1])
+        if (status == 200) and (date[0] == 12):
 
-        if status == 200:
+            print(f'----------\nGot the Data for {date[1]}...\n----------')
+            
             if validate('Continue?\ny/n: ') == True:
                 pass
             else:
                 break
-        else:
+
+        elif (status == 429):
             break

@@ -47,7 +47,7 @@ def get_months(start_month: int, start_year: int, end_month: int, end_year: int)
 
 if __name__ == "__main__":
 
-    data = get_months(11, 1961, 8, 1973)
+    data = get_months(13, 1961, 8, 1973)
 
     for i in data:
         print(i)

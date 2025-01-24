@@ -10,16 +10,20 @@ def check_history(main_folder: str):
         return None, None
     
     #get the last file within the subfolder
-    try: 
-        last_file = os.listdir(f'./{main_folder}/{year}')[-1]
+    try:
+        latest_month = 0
+
+        for file in os.listdir(f'./{main_folder}/{year}'):
+            current_month = int(file.split('-')[0])
+            if current_month > latest_month:
+                latest_month = current_month
+            
     #if subfolder has no files
     except IndexError:
         print(f'no files in "{main_folder}/{year}"')
         return None, year
 
-    last_filename = last_file.split('.')[0]
-    month = last_filename.split('-')[0]
-    return month, year
+    return latest_month, year
 
 
 if __name__ == '__main__':
