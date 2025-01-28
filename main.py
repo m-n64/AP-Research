@@ -42,18 +42,51 @@ if __name__ == '__main__':
         sy = input('start year: ')
 
     timespan = get_months(int(sm) + 1, int(sy), 8, 1973)
-    print(f'getting data from {int(sm) + 1}/{sy} to 8/1973...')
+
+    sm = timespan[0][0]
+    sy = timespan[0][1]
+    print(f'getting data from {sm}/{sy} to 8/1973...')
+    
+    while True:
+        try:
+            wait = int(input('Check every _ guesses: '))
+            break
+        except ValueError:
+            pass
+    
+    if wait > 12: wait = 12
+    elif wait < 1: wait = 1
+
+    if wait > 1:
+        print(f'Checking every {wait} guesses')
+    else:
+        print(f'Checking every 1 guess')
+    
+    i = 0
     
     for date in timespan:
+        
         status = archive(date[0], date[1])
-        if (status == 200) and (date[0] == 12):
+        i += 1
 
-            print(f'----------\nGot the Data for {date[1]}...\n----------')
+        if status == 200:
+
+            if date[0] == 12:
+
+                print(f'----------\nGot the Data for {date[1]}...\n----------')
+                
+                if validate('Continue?\ny/n: ') == True:
+                    pass
+                else:
+                    print('Ok.\nEnding search...')
+                    break
             
-            if validate('Continue?\ny/n: ') == True:
-                pass
-            else:
-                break
+            elif wait == i:
+                if validate('Continue?\ny/n: ') == True:
+                    i = 0
+                else:
+                    print('Ok.\nEnding search...')
+                    break
 
-        elif (status == 429):
+        elif status == 429:
             break
