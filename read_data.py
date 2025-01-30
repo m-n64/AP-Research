@@ -1,5 +1,8 @@
 import json
 import os
+import math
+
+
 
 for year in os.listdir('./data'):
 
@@ -17,6 +20,13 @@ for year in os.listdir('./data'):
                     except KeyError:
                         pass
             
-            print(f'Within {month}, {count} of {len(data)} were front page articles [{round(100*(count/len(data)))}%]')
         except json.JSONDecodeError as e:
-            print(f'---------\n{month}\n{e}\n----------')    
+            print(f'---------\n{month}\n{e}\n----------')
+
+
+def calculate_stats():
+    pass
+    # print each year's % of fps
+    # print total range's % of fps
+    # print all usable years
+    # print all UNUSABLE years
