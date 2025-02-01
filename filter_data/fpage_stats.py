@@ -7,7 +7,6 @@ sys.path.append(str(Path(__file__).parent.parent))
 from Useful.percent import percent
 
 def fpage_stats(stats: bool = False):
-
     key_files = []
     extra_files = []
     total_results = 0
@@ -26,12 +25,12 @@ def fpage_stats(stats: bool = False):
                 response = json.load(jsonFile)['response']
                 data = response['docs']
                 results = int(response['meta']['hits'])
-                article_keys[file] = []
+                article_keys[f'{year}/{file}'] = []
                 for article in data:
                     try:
                         if int(article['print_page']) == 1:
                             fpages += 1
-                            article_keys[file].append(data.index(article))
+                            article_keys[f'{year}/{file}'].append(data.index(article))
                             
                     except KeyError:
                         pass
@@ -42,7 +41,10 @@ def fpage_stats(stats: bool = False):
             if fpages > 0: key_files.append(file)
             else: extra_files.append(file)
             if stats:
-                print(f'---\n{date} -- {fpages}/{results} [{percent(fpages, results, 2)}%]\n---')
+                print(f'{date} -- {fpages}/{results} [{percent(fpages, results, 2)}%]')
+            else:
+                print(f'Completed {date}...')
+            print('----------')
             
     
     print(f'TOTAL -- {valid_results}/{total_results} [{percent(valid_results, total_results, 2)}%]')
@@ -54,4 +56,4 @@ def fpage_stats(stats: bool = False):
     return article_keys
 
 if __name__ == '__main__':
-    fpage_stats(True)
+    fpage_stats()
