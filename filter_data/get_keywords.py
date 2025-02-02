@@ -1,30 +1,63 @@
 from fpage_stats import fpage_stats
 import json
 
+import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).parent.parent))
+from Useful.dynamic_loading import load
+
+
 def get_values(key: str):
 
-    articles = fpage_stats()
+    files = fpage_stats()
     values = []
 
-    for file in articles:
+    for date in files:
 
-        with open(f'./data/{file}', 'r') as jsonFile:
+        with open(f'./data/{date}', 'r') as jsonFile:
 
             # open the file and load the json in "data"
 
             data = json.load(jsonFile)['response']['docs']
 
-            # for every saved index
-            for index in articles[file]:
+            # for every saved article
+            for article in files[date]:
                 try: 
-                    term = data[index][key]
+                    
+                    #get the key fron the dictionary and save the term.
+                    term = data[article][key]
 
-                    if term not in values:
-                        values.append(term)
-                        print(f'New Value: {term}')
+                    #keywords is the only known outlier at the moment, so if the key is keywords, go through the list.
+                    if key == 'keywords':
+
+                        for item in data[article][key]:
+
+                            term = item['value']
+                            
+                            if term not in values:
+                                values.append(term)
+
+                    #if the key is LITERALLY ANYTHING ELSE...
+                    else:
+                        if term not in values:
+                                values.append(term)
+                #if the key isn't there, skip
                 except KeyError:
                     pass
+                
+                #progress every article
+        load(list(files.keys()).index(date), len(files), f"Adding {key}")
+
     return values
 
 if __name__ == '__main__':
-    print(get_values('print_section'))
+
+    my_data = get_values('keywords')
+    print(my_data)
+    print('----------')
+    print(len(my_data))
+    if len(my_data) > 100:
+        print('Yikes... :|')
+    else:
+        print('light work, no reactin B)')

@@ -1,3 +1,5 @@
+
+
 def percent(num: float, den: float, dec: int = None):
     value = 100 * (num/den)
 
