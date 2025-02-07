@@ -44,6 +44,7 @@ def fpage_stats(stats: bool = False):
                 total_results += results
 
                 # for each article within the list, add its identifier to the dictionary, according to it's file loction
+
                 article_keys[f'{year}/{file}'] = []
                 for article in data:
                     try:
@@ -68,13 +69,18 @@ def fpage_stats(stats: bool = False):
                 print('----------')
             #otherwise, just share a generic loading message.
             else:
-                load(folders.index(year), len(folders), f'[{year}] Collecting Data')
+                load(year, folders, f'[{year}] Collecting Data')
     
     print(f'TOTAL USABLE ARTICLES -- {valid_results:,}/{total_results:,} [{percent(valid_results, total_results, 2)}%]')
 
     print(f'Usable Files: {percent(len(key_files), len(total_files), 2)}%')
     print(f'Unusable Files: {percent(len(extra_files), len(total_files), 2)}%')
+
     return article_keys
+    # article_keys = {
+    #   '1961/11-1961': [0, 52, 61]
+    # }
+
 
 if __name__ == '__main__':
     fpage_stats()
