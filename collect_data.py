@@ -21,13 +21,19 @@ def archive(month: int, year: int):
         print('Unkown Error...')
     return status
     
-def write(month: int, year: int, jsonFile: dict):
+def write(month: int, year: int, jsonFile: dict, root:str = "./raw_data"):
+    
     try:
-        os.mkdir(f'data/{year}')
+        os.mkdir(f'{root}')
     except FileExistsError:
         pass
     
-    with open(f'data/{year}/{month}-{year}.json', 'w') as f:
+    try:
+        os.mkdir(f'{root}/{year}')
+    except FileExistsError:
+        pass
+    
+    with open(f'{root}/{year}/{month}-{year}.json', 'w') as f:
         json.dump(jsonFile, f) 
 
 

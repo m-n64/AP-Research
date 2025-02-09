@@ -11,13 +11,11 @@ def check_history(main_folder: str):
     
     #get the last file within the subfolder
     try:
-        latest_month = 0
 
-        for file in os.listdir(f'./{main_folder}/{year}'):
-            current_month = int(file.split('-')[0])
-            if current_month > latest_month:
-                latest_month = current_month
-            
+
+        months = [file.split('-')[0] for file in os.listdir(f'./{main_folder}/{year}')]
+        latest_month = sorted(months, key=lambda file: int(file))[-1]
+
     #if subfolder has no files
     except IndexError:
         print(f'no files in "{main_folder}/{year}"')
@@ -28,5 +26,5 @@ def check_history(main_folder: str):
 
 if __name__ == '__main__':
 
-    month, year = check_history('test')
+    month, year = check_history('raw_data')
     print(f'Last date entered was "{month}/{year}"')

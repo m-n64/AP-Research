@@ -4,13 +4,27 @@ except ModuleNotFoundError:
     from Useful.percent import percent
 
 
-def load(i, length, msg = 'Loading', making_newline = False):
-    
+def load(i, length, making_newline = False, msg = 'Loading', completion = None):
+
+
+    if ((type(length) == list) or type(length) == dict) and (type(i) != int) and (i in length): 
+        
+        try:
+            length = list(length.keys())
+        except AttributeError:
+            pass
+        
+        i = length.index(i)
+        length = len(length)
+
+    if completion == None: completion = msg
+    elif completion == True: completion = 'Task Complete!'
+
     if (i == (length-1)) and making_newline: ending = '\n'
     else: ending = '\r'
     
 
-    if msg == '--show progress':
+    if msg == 'progress':
 
         # get the completion percent
         progress = percent(i, length)
@@ -44,7 +58,7 @@ def load(i, length, msg = 'Loading', making_newline = False):
             else: dots = '.' * (i % 4)
             display = msg + dots
         else:
-            display = f'{' ' * (3 + len(msg))}\rTask Complete!'
+            display = f'{' ' * (3 + len(msg))}\r{completion}'
             
         print(display, end=ending)
 
