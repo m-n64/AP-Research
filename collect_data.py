@@ -21,7 +21,7 @@ def archive(month: int, year: int):
         print('Unkown Error...')
     return status
     
-def write(month: int, year: int, jsonFile: dict, root:str = "./data"):
+def write(month: int, year: int, jsonFile: dict, root:str = "./raw_data"):
     
     try:
         os.mkdir(f'{root}')
