@@ -4,6 +4,7 @@ import json
 import sys
 import random
 import datetime
+from fractions import Fraction
 
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -79,7 +80,9 @@ class File:
             
         
         self.fpage_percent = percent(len(self.fpages), len(self.data), 2)
-        
+        self.fpage_frac = f'{len(self.fpages)}/{len(self.data)}'
+        self.fpage_ratio = Fraction(len(self.fpages), len(self.data))
+
 
         if len(self.fpages) >= 1: self.usable = True
         else: self.usable = False            
@@ -142,21 +145,25 @@ def search(data, y = None, m = None, a = None):
         if m < year.files[0].month: m = year.files[0].month
         elif m > year.files[-1].month: m = year.files[-1].month
 
-        month = pick_action(year.files, m) 
+        month = pick_action(year.files, m)
     
     # generate the data
     month.get_data()
 
     file_actions = ['Front Page Stats', 'Keyword Stats', 'Article Actions']
 
-    action = (file_actions)
+    action = pick_action(file_actions)
 
     if action == file_actions[0]:
-        pass
-        #print fpage stats
+        print(f'{month.fpage_frac}')
+        print('---------')
+        print(f'Percent: {month.fpage_percent}')
+        print(f'Ratio: {month.fpage_ratio}')
     elif action == file_actions[1]:
         pass
+        #print keywords
     elif action == file_actions[2]:
+        #print article actions
         if a == None: article = pick_action(month.fpages)
         else: article = pick_action(month.fpages, a)
 
@@ -173,29 +180,32 @@ def pick_action(action_list, response = None):
             print(f'{action_list.index(action) + 1} - {str(action)}')
         print('----------')
         
-        while (response := int(input('Pick an Action: '))) not in range(len(action_list) + 1):
+        response = int(input('Pick an Action: '))
+        while response not in range(len(action_list) + 1):
             response = int(input('Pick an Action: '))
         
         print('===========')
 
     for action in action_list:
         if action_list.index(action) + 1 == response:
+            print(str(action))
             return action
+    
+    if action == None:
+        print(f'{response} not in {action_list}')
 
 
 
 
 folders = os.listdir('./raw_data')
     
-article_data = [Folder(year, 'raw_data') for year in folders]
-        
+article_data = [Folder(year, 'raw_data') for year in folders]        
 
 if __name__ == '__main__':
 
 
-    file = search(article_data, 1971, 11)
-
-
-
+    article = search(article_data, 1961)
+    
+    article.rundown()
 
 
