@@ -2,7 +2,8 @@
 import os
 import json
 import sys
-
+import random
+import datetime
 
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -23,16 +24,19 @@ class Article:
     def __str__(self):
         return self.headline
 
+    def to_dict(self):
+        return {'file': self.location, 'date': self.date, 'headline': self.headline, 'keywords': self.keywords, 'url': self.link}
+    
     def rundown(self):
         
         
         print(f'"{self.location}"')
-        print(f'{self.file.fpage_percent}% || {len(self.file.fpages):,}/{len(self.file.data):,}')
         print('------------')
         print(f'Headline: {self.headline}')
         print(f'Keywords: {' || '.join([term['value'] for term in self.keywords])}')
         print(f'Published: {self.date.split('T')[0]}')
         print(f'URL: {self.link}')
+    
         
 class File:
     def __init__(self, name, folder, dir):
@@ -122,32 +126,57 @@ class Folder:
     
 
 
-def search(data):
-    year = pick_action(data)
-    month = pick_action(year.files)
-
-    while (response := input('Generate Data? y/n: ')) != ('y' or 'n'):
-        response = input('y/n: ')
-
-    if response == 'y':
-        month.get_data()
-    elif response == 'n':
-        print(month.location)
-        return
-        
-    article = pick_action(month.fpages)
-
-    article.rundown()
+def search(data, y = None, m = None, a = None):
 
 
-def pick_action(action_list):
-    for action in action_list:
-        print(f'{action_list.index(action) + 1} - {str(action)}')
-    print('----------')
-    while (response := int(input('Pick an Action: '))) not in range(len(action_list) + 1):
-        response = int(input('Pick an Action: '))
+    # if no year specified, pick one
+    if y == None:
+        year = pick_action(data)
+    else:
+        year = pick_action(data, y-1960)
+
+    # if no month specified, pick one
+    if m == None:
+        month = pick_action(year.files)
+    else:
+        if m < year.files[0].month: m = year.files[0].month
+        elif m > year.files[-1].month: m = year.files[-1].month
+
+        month = pick_action(year.files, m) 
     
-    print('===========')
+    # generate the data
+    month.get_data()
+
+    file_actions = ['Front Page Stats', 'Keyword Stats', 'Article Actions']
+
+    action = (file_actions)
+
+    if action == file_actions[0]:
+        pass
+        #print fpage stats
+    elif action == file_actions[1]:
+        pass
+    elif action == file_actions[2]:
+        if a == None: article = pick_action(month.fpages)
+        else: article = pick_action(month.fpages, a)
+
+        return article
+
+
+        
+
+
+def pick_action(action_list, response = None):
+    
+    if response == None:
+        for action in action_list:
+            print(f'{action_list.index(action) + 1} - {str(action)}')
+        print('----------')
+        
+        while (response := int(input('Pick an Action: '))) not in range(len(action_list) + 1):
+            response = int(input('Pick an Action: '))
+        
+        print('===========')
 
     for action in action_list:
         if action_list.index(action) + 1 == response:
@@ -159,14 +188,13 @@ def pick_action(action_list):
 folders = os.listdir('./raw_data')
     
 article_data = [Folder(year, 'raw_data') for year in folders]
-    
-    
-
+        
 
 if __name__ == '__main__':
 
 
-    search(article_data)
+    file = search(article_data, 1971, 11)
+
 
 
 
