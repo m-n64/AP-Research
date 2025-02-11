@@ -180,7 +180,6 @@ def search(data, y = None, m = None, a = None):
         
         if m < year.files[0].month: m = year.files[0].month
         elif m > year.files[-1].month: m = year.files[-1].month
-
         month = pick_action(year.files, month_list.index(m) + 1)
     
     # generate the data
@@ -208,10 +207,14 @@ def search(data, y = None, m = None, a = None):
 
 
 def pick_action(action_list, response = None):
-    
+
     if response == None:
+
         for action in action_list:
             print(f'{action_list.index(action) + 1} - {str(action)}')
+            
+
+            
         print('----------')
         
         response = int(input('Pick an Action: '))
@@ -220,6 +223,7 @@ def pick_action(action_list, response = None):
         
         print('===========')
 
+    
     for action in action_list:
         if action_list.index(action) + 1 == response:
             return action
