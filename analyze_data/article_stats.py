@@ -4,7 +4,7 @@ import os
 from fractions import Fraction
 import datetime
 from pathlib import Path
-
+import random
 sys.path.append(str(Path(__file__).parent.parent))
 from Useful.percent import percent    
 from Useful.dynamic_loading import load
@@ -31,14 +31,29 @@ class Article:
         time = pub_date[1].split(':')
         time = [int(i) for i in time]
 
-        self.date = datetime.datetime(date[0], date[1], date[2], time[0], time[1], time[0])
+        self.date = datetime.datetime(date[0], date[1], date[2], time[0], time[1], time[2])
         self.link = data['web_url']
+        self.id = data['_id']
 
     def __str__(self):
         return self.headline
 
     def to_dict(self):
-        return {'file': self.location, 'date': self.date, 'headline': self.headline, 'keywords': self.keywords, 'url': self.link}
+        return {
+            'file': self.location,
+            'year': self.date.strftime(f'%Y'),
+            'day': self.date.strftime(f'%b. %d'),
+            'headline': self.headline,
+            'print_section': self.print_section,
+            'abstract': self.abstract,
+            'keywords': [{
+                'value': i['value'],
+                'points': 514 - int(i['rank'])
+                } for i in self.keywords],
+            'time': self.date.strftime(f'%X'),
+            'url': self.link,
+            'copyright': self.file.copyright
+            }
     
     def rundown(self):
         
@@ -49,8 +64,10 @@ class Article:
         print(f'Keywords: {' || '.join([term['value'] for term in self.keywords])}')
         print(f'Abstract: {self.abstract}') 
         print(f'Print Section: {self.print_section}')
-        print(f'Published: {self.date.strftime(f"%c")}')
+        print(f'Published: {self.date.strftime(f"%A, %b %d, %Y")}')
         print(f'URL: {self.link}')
+        print('----------')
+        print(str(self.file.copyright))
     
         
 class File:
@@ -62,6 +79,9 @@ class File:
         self.date = datetime.datetime(self.year, self.month, 1)
         self.location = f'./{dir}/{folder}/{name}'
 
+    def __str__(self):
+        return self.name
+    
     def get_data(self): 
         # assign data according to the file
         with open(str(self.location), 'r') as jsonFile:
@@ -89,7 +109,7 @@ class File:
             except KeyError:
                 self.extra.append(new_article)
 
-            load(article, self.data, True, f'[{self.date.strftime(f'%x')}] Loading', f'[{self.date.strftime(f'%x')}] Task Completed')
+            load(article, self.data, True, f'[{self.date.strftime(f'%b. %Y')}] Loading', f'[{self.date.strftime(f'%b. %Y')}] Task Completed')
             
             
         
@@ -108,22 +128,25 @@ class File:
                 
                 value = keyword['value']
 
-                if value not in list(wordcount.keys()): wordcount[value] = {'type': [], 'points': 0}
+                # if value not in list(wordcount.keys()): wordcount[value] = {'type': [], 'points': 0}
 
-                type = keyword['name']
-                if type not in wordcount[value]['type']: wordcount[value]['type'].append(type)
+                # type = keyword['name']
+                # if type not in wordcount[value]['type']: wordcount[value]['type'].append(type)
+                
+                # points = 514-int(keyword['rank'])
+
+                # wordcount[value]['points'] += points
+
+                if value not in list(wordcount.keys()): wordcount[value] = 0
                 
                 points = 514-int(keyword['rank'])
 
-                wordcount[value]['points'] += points
-        # wordcount = sorted(wordcount.items(), key=lambda word: word['points'])
+                wordcount[value] += points
 
         
 
         print(wordcount)
 
-    def __str__(self):
-        return self.name
         
 
 
@@ -137,6 +160,8 @@ class Folder:
         for file in sorted(os.listdir(self.location), key=lambda date: int(date.split('-')[0])):
             self.files.append(File(file, name, dir))
         
+    def __str__(self):
+        return self.location
 
     def total_fpages(self):
         # create fpage_stats
@@ -153,12 +178,8 @@ class Folder:
                     file.get_data()
 
         self.fpage_percent = percent(self.abs_fpages, self.abs_total, 2)
-
-
         
 
-    def __str__(self):
-        return self.location
 
 
 
@@ -186,8 +207,8 @@ def search(data, y = None, m = None, a = None):
     month.get_data()
 
     file_actions = ['Front Page Stats', 'Keyword Stats', 'Article Actions']
-
-    action = pick_action(file_actions)
+    if a == None: action = pick_action(file_actions)
+    else: action = file_actions[2]
 
     if action == file_actions[0]:
         print(f'{month.fpage_frac}')
@@ -195,14 +216,15 @@ def search(data, y = None, m = None, a = None):
         print(f'Percent: {month.fpage_percent}')
         print(f'Ratio: {month.fpage_ratio}')
     elif action == file_actions[1]:
-        print(month.get_keywords())
+        return month.get_keywords()
         #print keywords
     elif action == file_actions[2]:
         #print article actions
         if a == None: article = pick_action(month.fpages)
+        elif a == 'random': article = pick_action(month.fpages, random.randint(0, len(month.fpages)))
         else: article = pick_action(month.fpages, a)
 
-        article.rundown()
+        return article
 
 
 
@@ -234,10 +256,12 @@ def pick_action(action_list, response = None):
 
 
 
+folders = os.listdir('./raw_data')
+
+article_data = [Folder(year, 'raw_data') for year in folders]
 
 if __name__ == '__main__':
     
-    folders = os.listdir('./raw_data')
+    article = search(article_data, 1961, 11, 'random')
 
-    article_data = [Folder(year, 'raw_data') for year in folders]
-    search(article_data, 1961, 11)  
+    print(article.to_dict())
