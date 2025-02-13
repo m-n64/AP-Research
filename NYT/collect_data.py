@@ -5,8 +5,13 @@ from Useful.get_months import get_months
 from Useful.loop_buffer import validate
 from Useful.check_history import check_history
 
+from pathlib import Path
+import sys
+sys.path.append(str(Path(__file__).parent.parent))
+from keys import Archive as key
+
 def archive(month: int, year: int):
-    url = f'https://api.nytimes.com/svc/archive/v1/{year}/{month}.json?api-key=AiqnOCCGOOEoohhGGYEGdnXjraJ3mFRj'
+    url = f'https://api.nytimes.com/svc/archive/v1/{year}/{month}.json?api-key={key}'
 
     response = requests.get(url)
     status = response.status_code
