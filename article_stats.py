@@ -19,8 +19,6 @@ class Article:
         self.abstract = data['abstract']
         self.keywords = data['keywords']
         
-        data['keywords']
-
         try: self.print_section = data['print_section']
         except AttributeError: self.print_section = 'Undocumented'
         except KeyError: self.print_section = 'Undocumented'
