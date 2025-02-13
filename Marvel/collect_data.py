@@ -17,9 +17,9 @@ hash = hashlib.md5(f'{ts}{private}{public}'.encode()).hexdigest()
 
 
 
-def collect_data(entity):
+def collect_data(entity, name):
     
-    response = requests.get(f'http://gateway.marvel.com/v1/public/{entity}?ts={ts}&apikey={public}&hash={hash}')
+    response = requests.get(f'http://gateway.marvel.com/v1/public/{entity}?ts={ts}&apikey={public}&hash={hash}&name={name}')
     data = response.json()
 
     try: os.mkdir(f'./Marvel/raw_data')
@@ -30,17 +30,6 @@ def collect_data(entity):
 
 
 if __name__ == '__main__':
+    collect_data('characters', 'Peter Parker')
 
-    # collect_data('characters')
-    # collect_data('series')
-
-    with open('./Marvel/raw_data/characters.json', 'r') as jsonFile:
-        raw = json.load(jsonFile)
-        characters = raw['data']['results']
-
-    for c in characters:
-        print(c['name'])
-        if c['name'].lower() == 'Spider-Man'.lower():
-            print(c['id'])
-            break
-    else: print("couldn't find...")
+    
