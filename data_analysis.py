@@ -124,7 +124,7 @@ if __name__ == '__main__':
             keyword_data = json.load(jsonFile)
             kw_df = create_kw(keyword_data)
         
-        kw_df.to_csv(f'./dataframes/keywords/{file}.csv', encoding='utf-8', header= True)
+        kw_df.to_csv(f'./dataframes/keywords/{file.split('.')[0]}.csv', encoding='utf-8', header= True)
 
             
 
