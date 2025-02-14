@@ -109,8 +109,8 @@ def create_kw(json_data):
     return df
 
 if __name__ == '__main__':
-    # compile_data(article_data)
-    # compile_keywords(article_data)
+    compile_data(article_data)
+    compile_keywords(article_data)
     try: os.mkdir('./NYT/dataframes')
     except FileExistsError: pass
     try: os.mkdir('./NYT/dataframes/keywords')

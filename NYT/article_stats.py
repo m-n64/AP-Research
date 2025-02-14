@@ -2,7 +2,7 @@ import json
 import sys
 import os
 from fractions import Fraction
-import datetime
+from datetime import datetime
 from pathlib import Path
 import random
 sys.path.append(str(Path(__file__).parent.parent))
@@ -23,15 +23,7 @@ class Article:
         except AttributeError: self.print_section = 'Undocumented'
         except KeyError: self.print_section = 'Undocumented'
         
-
-        pub_date = data['pub_date'].split('+')[0].split('T')
-        date = pub_date[0].split('-')
-        date = [int(i) for i in date]
-
-        time = pub_date[1].split(':')
-        time = [int(i) for i in time]
-
-        self.date = datetime.datetime(date[0], date[1], date[2], time[0], time[1], time[2])
+        self.date = datetime.strptime(data['pub_date'], f'%Y-%m-%dT%H:%M:%S%z')
         self.link = data['web_url']
         self.id = data['_id']
 
@@ -45,7 +37,7 @@ class Article:
             'print_section': self.print_section,
             'abstract': self.abstract,
             'keywords': [i['value']for i in self.keywords],
-            'time': self.date.strftime(f'%X'),
+            'time': self.date.strftime(f'%X%z'),
             'url': self.link,
             'file': self.location,
             'copyright': self.file.copyright
@@ -70,9 +62,9 @@ class File:
     def __init__(self, name, folder, dir):
         # assign preestablished data
         self.name = name
-        self.month = int(name.split('-')[0])
-        self.year = int(folder)
-        self.date = datetime.datetime(self.year, self.month, 1)
+        self.date = datetime.strptime(self.name, f'%m-%Y.json')
+        self.month = self.date.month
+        self.year = self.date.year
         self.location = f'./NYT/{dir}/{folder}/{name}'
 
     def __str__(self):
