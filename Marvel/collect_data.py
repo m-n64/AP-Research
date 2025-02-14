@@ -38,7 +38,8 @@ class Hero:
 
         for series in self.comics:
             for comic in self.get_data('comics'):
-                if series == comic['series']:
+
+                if series == comic['series']['name']:
                     self.comics[series]['issues'].append({
                         'issueNumber': comic['issueNumber'],
                         'id': comic['id'],
@@ -64,8 +65,8 @@ class Hero:
 
             response = requests.get(url).json()
             response2 = requests.get(url2).json()
-            print(response['data']['results'][-1]['title'])
-            print(response2['data']['results'][0]['title'])
+            
+            
 
             response['data']['count'] += response2['data']['count']
             response['data']['limit'] += response2['data']['limit']
@@ -81,33 +82,45 @@ class Hero:
             
             return json.load(jsonFile)['data']['results']
 
-    
+
+    def to_df(self):
+        
+        df = []
+
+        for series in self.comics:
+        
+            issue_list = self.comics[series]['issues']
+            
+            df.append({
+                'Series': [series] * len(issue_list),
+                'Issues': [issue['issueNumber'] for issue in issue_list],
+                'On Sale Date': [datetime.strptime(issue['published'], f'%Y-%m-%dT%H:%M:%S%z') for issue in issue_list],
+            })
+        
+        return df
 
 
 
-if __name__ == '__main__':
 
-    print(datetime.strptime("1971-05-01T00:00:00-0400", f'%Y-%m-%dT%H:%M:%S%z').date())
-    hero_data = {
-        'Spider-Man (Peter Parker)' : [
-            'Amazing Fantasy (1962)',
-            'The Amazing Spider-Man (1963 - 1998)',
-            'Amazing Spider-Man Annual (1964 - 2018)',
-            'Spectacular Spider-Man (1968)'
-        ],
-        'Captain America': [
-            'Tales of Suspense (1959 - 1968)',
-            'Avengers (1963 - 1996)',
-            'Avengers Annual (1967 - 1994)',
-            'Captain America (1968 - 1996)',
-            'Captain America Annual (1971 - 1991)'
-        ],
-        'Fantastic Four': [
-            'Fantastic Four (1961 - 1998)',
-            'Fantastic Four Annual (1963 - 1994)'
-        ]
-    }
-    
+hero_data = {
+    'Spider-Man (Peter Parker)' : [
+        'Amazing Fantasy (1962)',
+        'The Amazing Spider-Man (1963 - 1998)',
+        'Amazing Spider-Man Annual (1964 - 2018)',
+        'Spectacular Spider-Man (1968)'
+    ],
+    'Captain America': [
+        'Tales of Suspense (1959 - 1968)',
+        'Avengers (1963 - 1996)',
+        'Avengers Annual (1967 - 1994)',
+        'Captain America (1968 - 1996)',
+        'Captain America Annual (1971 - 1991)'
+    ],
+    'Fantastic Four': [
+        'Fantastic Four (1961 - 1998)',
+        'Fantastic Four Annual (1963 - 1994)'
+    ]
+}
 
-    sample = [Hero(char, hero_data[char]) for char in hero_data]
-    
+
+sample = [Hero(char, hero_data[char]) for char in hero_data]
