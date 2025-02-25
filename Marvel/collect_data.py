@@ -25,7 +25,6 @@ class Hero:
         self.id = self.get_data('characters')[0]['id']        
         self.comics = {}
         
-
         for i in titles:
             for series in self.get_data('series'):
                 if i == series['title']:
@@ -36,6 +35,7 @@ class Hero:
                     break
         
 
+        print(f'making comics for {name}')
         for series in self.comics:
             for comic in self.get_data('comics'):
 
@@ -54,7 +54,10 @@ class Hero:
 
         url = f'http://gateway.marvel.com/v1/public/{entity}?&ts={ts}&apikey={public}&hash={hash}'
 
-        if entity == 'series':
+        if entity == 'characters':
+            url += f'&name={self.name}'
+
+        elif entity == 'series':
             url += f'&contains=comic&limit=100&orderBy=startYear&characters={self.id}'
         elif entity == 'comics':
             url += f'&dateRange=1961-11-01,1973-08-31&series={",".join([str(self.comics[i]['id']) for i in self.comics])}&orderBy=onsaleDate&characters={self.id}&format=comic&formatType=comics&noVariants=True&limit=100'
@@ -65,13 +68,13 @@ class Hero:
         if os.path.isfile(f'{Path(__file__).parent}/raw_data/{self.name}/{entity}.json') == False:
 
             response = requests.get(url).json()
-            response2 = requests.get(url2).json()
-            
-            
-
-            response['data']['count'] += response2['data']['count']
-            response['data']['limit'] += response2['data']['limit']
-            response['data']['results'].extend(response2['data']['results'])
+            try: 
+                response2 = requests.get(url2).json()
+                response['data']['count'] += response2['data']['count']
+                response['data']['limit'] += response2['data']['limit']
+                response['data']['results'].extend(response2['data']['results'])
+            except UnboundLocalError:
+                print(f'entity == {entity}')
 
             
 
@@ -115,8 +118,6 @@ hero_data = {
     ],
     'Captain America': [
         'Tales of Suspense (1959 - 1968)',
-        'Avengers (1963 - 1996)',
-        'Avengers Annual (1967 - 1994)',
         'Captain America (1968 - 1996)',
         'Captain America Annual (1971 - 1991)'
     ],
