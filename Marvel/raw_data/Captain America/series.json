@@ -4,7 +4,7 @@
     "copyright": "\u00a9 2025 MARVEL",
     "attributionText": "Data provided by Marvel. \u00a9 2025 MARVEL",
     "attributionHTML": "<a href=\"http://marvel.com\">Data provided by Marvel. \u00a9 2025 MARVEL</a>",
-    "etag": "6c06285f21b2b1ac7e2352584cc6d4ee9d2d7e54",
+    "etag": "17a5f738541aa4484f368c85caa739647e8f784d",
     "data": {
         "offset": 0,
         "limit": 100,
@@ -5303,7 +5303,7 @@
                     "returned": 20
                 },
                 "stories": {
-                    "available": 1062,
+                    "available": 1066,
                     "collectionURI": "http://gateway.marvel.com/v1/public/series/1991/stories",
                     "items": [
                         {
@@ -6436,7 +6436,7 @@
                     "extension": "jpg"
                 },
                 "creators": {
-                    "available": 286,
+                    "available": 290,
                     "collectionURI": "http://gateway.marvel.com/v1/public/series/2002/creators",
                     "items": [
                         {
@@ -6630,7 +6630,7 @@
                     "returned": 20
                 },
                 "stories": {
-                    "available": 1282,
+                    "available": 1290,
                     "collectionURI": "http://gateway.marvel.com/v1/public/series/2002/stories",
                     "items": [
                         {
@@ -14330,7 +14330,7 @@
                 "endYear": 1984,
                 "rating": "",
                 "type": "",
-                "modified": "2019-10-01T19:28:56-0400",
+                "modified": "2025-02-21T11:03:27-0500",
                 "thumbnail": {
                     "path": "http://i.annihil.us/u/prod/marvel/i/mg/c/c0/5d93a8efe4f21",
                     "extension": "jpg"
@@ -14530,7 +14530,7 @@
                     "returned": 20
                 },
                 "stories": {
-                    "available": 308,
+                    "available": 306,
                     "collectionURI": "http://gateway.marvel.com/v1/public/series/2095/stories",
                     "items": [
                         {
@@ -14637,7 +14637,7 @@
                     "returned": 20
                 },
                 "comics": {
-                    "available": 48,
+                    "available": 47,
                     "collectionURI": "http://gateway.marvel.com/v1/public/series/2095/comics",
                     "items": [
                         {
@@ -15615,7 +15615,7 @@
                     "extension": "jpg"
                 },
                 "creators": {
-                    "available": 184,
+                    "available": 182,
                     "collectionURI": "http://gateway.marvel.com/v1/public/series/3719/creators",
                     "items": [
                         {
@@ -15809,7 +15809,7 @@
                     "returned": 20
                 },
                 "stories": {
-                    "available": 480,
+                    "available": 484,
                     "collectionURI": "http://gateway.marvel.com/v1/public/series/3719/stories",
                     "items": [
                         {
@@ -17976,7 +17976,7 @@
                     "extension": "jpg"
                 },
                 "creators": {
-                    "available": 218,
+                    "available": 221,
                     "collectionURI": "http://gateway.marvel.com/v1/public/series/2262/creators",
                     "items": [
                         {
@@ -18060,6 +18060,11 @@
                             "role": "penciler"
                         },
                         {
+                            "resourceURI": "http://gateway.marvel.com/v1/public/creators/506",
+                            "name": "Joe Bennett",
+                            "role": "penciler"
+                        },
+                        {
                             "resourceURI": "http://gateway.marvel.com/v1/public/creators/4583",
                             "name": "Steve Biasi",
                             "role": "penciler"
@@ -18073,11 +18078,6 @@
                             "resourceURI": "http://gateway.marvel.com/v1/public/creators/4591",
                             "name": "Ramon Bernado",
                             "role": "penciller"
-                        },
-                        {
-                            "resourceURI": "http://gateway.marvel.com/v1/public/creators/4541",
-                            "name": "Mat Broome",
-                            "role": "penciler (cover)"
                         }
                     ],
                     "returned": 20
@@ -23685,7 +23685,7 @@
                         },
                         {
                             "resourceURI": "http://gateway.marvel.com/v1/public/creators/12581",
-                            "name": "Vc Chris Eliopoulos",
+                            "name": "Chris Eliopoulos",
                             "role": "letterer"
                         },
                         {
