@@ -47,8 +47,7 @@ class Hero:
                     })
 
 
-    def __str__(self):
-        return self.name
+        
 
     def get_data(self, entity):
 
@@ -92,13 +91,10 @@ class Hero:
         
             issue_list = self.comics[series]['issues']
             
-            on_sale_dates = [datetime.strptime(issue['published'], f'%Y-%m-%dT%H:%M:%S%z') for issue in issue_list]
-
             df.append({
                 'Series': [series] * len(issue_list),
                 'Issues': [issue['issueNumber'] for issue in issue_list],
-                'Cover Date': [date.strftime(f'%b. %Y') for date in on_sale_dates],
-                'On Sale Date': on_sale_dates
+                'On Sale Date': [datetime.strptime(issue['published'], f'%Y-%m-%dT%H:%M:%S%z') for issue in issue_list],
             })
         
         return df
