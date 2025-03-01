@@ -13,8 +13,7 @@ This project collects data from the New York Times and Marvel Comics APIs within
 To get this project running, follow these steps:
 
 1. Clone the repo:
-    ```
-    sh
+    ```sh
     git clone https://github.com/m-n64/AP-Research.git
     ```
 2. Ensure you have Python installed on your system. You can download it from [python.org](https://www.python.org/).
