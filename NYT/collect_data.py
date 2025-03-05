@@ -41,15 +41,17 @@ def write(month: int, year: int, jsonFile: dict, root:str = "./NYT/raw_data"):
         json.dump(jsonFile, f) 
 
 
+
+
 if __name__ == '__main__':
 
 
     sm, sy = check_history('data')
     
     if sm == None:
-        sm = input('start month: ')
+        sm = 11
     if sy == None:
-        sy = input('start year: ')
+        sy = 1961
 
     timespan = get_months(int(sm) + 1, int(sy), 8, 1973)
 
