@@ -1,13 +1,19 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 from datetime import datetime
+import json
+import os
 
 
-terms = {
-    'The Cold War': ['Communism','Communist', 'Soviet', 'USSR', 'Freedom', 'Democracy', 'Cold War', 'Vietnam'],
-    'Science and Technology': ['Science', 'Technology', 'Radiation', 'Space', 'Bomb'],
-    'Youth and Reform': ['Drug', 'Civil Rights', 'Youth', 'Student', 'Negro', 'Protest', 'Riot', 'Police']
-}
+keywords = [
+    
+    {'Communism': ['Communism', 'Communist', 'Soviet', 'USSR']},  
+    {'Radiation and Atomic Science': ['Radiation', 'Radiate', 'Radioactivity', 'Atom', 'Nuclear', 'Warhead']},
+    {'Space': ['Space', 'Moon', 'Aeronaut', 'Astronaut', 'Cosmonaut', 'NASA']}, 
+    {'Youth & Counterculture': ['Youth', 'Student', 'Drug', 'Activism', 'Activist', 'Protest', 'Riot']},
+    'Vietnam'
+
+]
 
 
 
@@ -18,35 +24,85 @@ master = pd.read_csv('./NYT/dataframes/master.csv')
 
 # first check the keywords, then check the headline, then check the abstract
 
-def check_occurences(item):
+def check_occurences(word):
     
-    occurences = {}
-    i = item.lower()
-
+    wordcount = {}
+            
     for index, row in master.iterrows():
 
         headline = row['headline'].lower()
         keywords = row['keywords'].lower()
-        date = datetime.strptime(row['date'], f'%Y-%m-%d').strftime(f'%m/%Y')
-        
-        if date not in occurences: occurences[date] = 0
-
         try:
             abstract = row['abstract'].lower()
         except AttributeError:
             pass
 
-        if (i in headline) or (i in keywords) or (i in abstract):
-            occurences[date] += 1
+        date = datetime.strptime(row['date'], f'%Y-%m-%d').strftime(f'%m/%Y')
+
+        if date not in wordcount: wordcount[date] = 0
+
+        if type(word) == str:
+            
+            w = word.lower()
+            if (w in keywords) or (w in headline) or (w in abstract):
+                wordcount[date] += 1
+
+            
+        elif type(word) == dict:
+
+            for term in word[list(word.keys())[0]]:
+                t = term.lower()
+                if (t in keywords) or (t in headline) or (t in abstract):
+                    wordcount[date] += 1
+
+    
+    return wordcount
+
+
+
+if __name__ == '__main__':
+    
+    if os.path.exists('./NYT/filtered_data/graphing.json') == False:
+    
+        occurences = {}
+        
+        for i in keywords: 
+            if type(i) == dict:
+                occurences[list(i.keys())[0]] = check_occurences(i)
+            else:
+                occurences[i] = check_occurences(i)
+            
+            print(f'finished {i}')
+
+        with open('./NYT/filtered_data/graphing.json', 'w') as jsonFile:
+            json.dump(occurences, jsonFile, indent=4)
     
 
-    return occurences
-    
-occurences = {}
+    if os.path.exists('./NYT/dataframes/graphing.csv') == False:
 
-for genre in terms:
-    occurences[genre] = {i : check_occurences(i) for i in terms[genre]}
-    print(f'finished {genre}')
+        with open('./NYT/filtered_data/graphing.json', 'r') as jsonFile:
+            occurences = json.load(jsonFile)
+
+        dfs = {i: pd.json_normalize(occurences[i]).transpose() for i in occurences}
+
+        master_df = pd.DataFrame([])
+
+        for i in dfs:
 
 
-print(occurences)
+            dfs[i] = dfs[i].reset_index()
+            dfs[i].columns = ['Date', i]
+            dfs[i]['Date'] = pd.to_datetime(dfs[i]['Date'])
+
+            try:
+                master_df = pd.merge(master_df, dfs[i], on='Date', how='outer')
+            except KeyError:
+                master_df = dfs[i]
+            
+            
+        master_df = master_df.drop(0, axis='index')
+        print(master_df.head())
+
+        master_df.to_csv('./NYT/dataframes/graphing.csv')
+
+
