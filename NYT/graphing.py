@@ -10,7 +10,7 @@ keywords = [
     {'Communism': ['Communism', 'Communist', 'Soviet', 'USSR']},  
     {'Radiation and Atomic Science': ['Radiation', 'Radiate', 'Radioactivity', 'Atom', 'Nuclear', 'Warhead']},
     {'Space': ['Space', 'Moon', 'Aeronaut', 'Astronaut', 'Cosmonaut', 'NASA']}, 
-    {'Youth & Counterculture': ['Youth', 'Student', 'Drug', 'Activism', 'Activist', 'Protest', 'Riot']},
+    {'Social Change and Reform': ['Youth', 'Student', 'Drug', 'Activism', 'Activist', 'Protest', 'Riot', 'Hippie', 'Hipster', 'boycott', 'civil right', 'malcolm x', 'black', 'negro', 'martin luther king' 'mlk', 'segregation', 'negro', 'police', 'feminism', 'feminist', 'gay', 'assasinat', 'vote', 'voting']},
     'Vietnam'
 
 ]
@@ -62,23 +62,23 @@ def check_occurences(word):
 
 if __name__ == '__main__':
     
-    if os.path.exists('./NYT/filtered_data/graphing.json') == False:
-    
-        occurences = {}
-        
-        for i in keywords: 
-            if type(i) == dict:
-                occurences[list(i.keys())[0]] = check_occurences(i)
-            else:
-                occurences[i] = check_occurences(i)
-            
-            print(f'finished {i}')
-
-        with open('./NYT/filtered_data/graphing.json', 'w') as jsonFile:
-            json.dump(occurences, jsonFile, indent=4)
-    
-
     if os.path.exists('./NYT/dataframes/graphing.csv') == False:
+
+        if os.path.exists('./NYT/filtered_data/graphing.json') == False:
+        
+            occurences = {}
+            
+            for i in keywords: 
+                if type(i) == dict:
+                    occurences[list(i.keys())[0]] = check_occurences(i)
+                else:
+                    occurences[i] = check_occurences(i)
+                
+                print(f'finished {i}')
+
+            with open('./NYT/filtered_data/graphing.json', 'w') as jsonFile:
+                json.dump(occurences, jsonFile, indent=4)
+
 
         with open('./NYT/filtered_data/graphing.json', 'r') as jsonFile:
             occurences = json.load(jsonFile)
