@@ -134,41 +134,39 @@ def check_occurences(term_list):
 
 if __name__ == '__main__':
     
-    if os.path.exists('./NYT/dataframes/graphing.csv') == False:
 
-        if os.path.exists('./NYT/filtered_data/graphing.json') == False:
         
-            occurences = {}
-            
-            for i in keywords: 
-                
-                occurences[i] = check_occurences(keywords[i])
-                
-                print(f'finished {i}')
+    occurences = {}
+    
+    for i in keywords: 
+        
+        occurences[i] = check_occurences(keywords[i])
+        
+        print(f'finished {i}')
 
-            with open('./NYT/filtered_data/graphing.json', 'w') as jsonFile:
-                json.dump(occurences, jsonFile, indent=4)
-
-
-        with open('./NYT/filtered_data/graphing.json', 'r') as jsonFile:
-            occurences = json.load(jsonFile)
-
-        dfs = {i: pd.json_normalize(occurences[i]).transpose() for i in occurences}
-
-        master_df = pd.DataFrame([])
-
-        for i in dfs:
+    with open('./NYT/filtered_data/graphing.json', 'w') as jsonFile:
+        json.dump(occurences, jsonFile, indent=4)
 
 
-            dfs[i] = dfs[i].reset_index()
-            dfs[i].columns = ['Date', i]
-            dfs[i]['Date'] = pd.to_datetime(dfs[i]['Date'])
+    with open('./NYT/filtered_data/graphing.json', 'r') as jsonFile:
+        occurences = json.load(jsonFile)
 
-            try:
-                master_df = pd.merge(master_df, dfs[i], on='Date', how='outer')
-            except KeyError:
-                master_df = dfs[i]
-            
+    dfs = {i: pd.json_normalize(occurences[i]).transpose() for i in occurences}
+
+    master_df = pd.DataFrame([])
+
+    for i in dfs:
+
+
+        dfs[i] = dfs[i].reset_index()
+        dfs[i].columns = ['Date', i]
+        dfs[i]['Date'] = pd.to_datetime(dfs[i]['Date'])
+
+        try:
+            master_df = pd.merge(master_df, dfs[i], on='Date', how='outer')
+        except KeyError:
+            master_df = dfs[i]
+        
             
         master_df = master_df.drop(0, axis='index')
         print(master_df.head())
