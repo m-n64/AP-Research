@@ -16,6 +16,12 @@ filter = {
         'COMMUNISM',
 
         'BIG POWERS (FRANCE, GB, USSR AND US) MUTUAL RELATIONS AND COLD WAR',
+        "STALIN, JOSEPH VISSARIONOVICH",
+        'COMMUNIST-WESTERN CONFRONTATION',
+        'AMERICAN NATIONS AND WESTERN HEMISPHERE POSSESIONS',
+        'AMERICAN NATIONS AND WESTERN HEMISPHERE POSESIONS',
+        'AMERICAN NATIONS AND WESTERN HEMISPHERE'
+
 
     ],
 
@@ -30,9 +36,6 @@ filter = {
 
         'ASTRONAUTICS',
         'AERONAUTICS'
-
-
-        
 
     ],
 
@@ -55,6 +58,10 @@ filter = {
 
         'NUCLEAR WEAPONS',
         'NUCLEAR RESEARCH',
+
+        'ARMS CONTROL AND LIMITATION AND DISARMAMENT',
+        'ARMS CONTROL AND DISARMAMENT AGENCY',
+        'ARMS CONTROL AND DISARMAMENT AGENCY, UNITED STATES',
 
     ],
 
@@ -87,6 +94,29 @@ filter = {
         'DRAFT AND MOBILIZATION OF TROOPS',
         'DRAFT AND RECRUITMENT, MILITARY'
     ],
+
+    'Spies and Sabotage': [
+        'Espionage',
+        'ESPIONAGE AND SUBVERSION',
+        'Intelligence',
+        'INTERNAL SECURITY',
+        'POLITICS AND SECURITY',
+        'FOREIGN INTERESTS, AGENTS OF'
+
+    ],
+
+    'Crime and the Police': [
+        'POLICE (GENERAL)',
+        'Police',
+        'POLICE',
+        'POLICE DEPATMENT',
+
+        'CRIME',
+        'CRIME AND CRIMINAL S',
+        'Crime and Criminals',
+        'CRIME AND CRIMINALS'
+    ]
+
 
 }
 
@@ -127,36 +157,32 @@ def check_occurences(terms):
 
 if __name__ == '__main__':
     
-    if os.path.exists('./NYT/dataframes/graphing.csv') == True:
+    occurences = {i: check_occurences(filter[i]) for i in filter}
 
-        if os.path.exists('./NYT/filtered_data/graphing.json') == True:
+    with open('./NYT/filtered_data/graphing.json', 'w') as jsonFile:
+        json.dump(occurences, jsonFile, indent=4)
+
+    with open('./NYT/filtered_data/graphing.json', 'r') as jsonFile:
+        occurences = json.load(jsonFile)
+
+    dfs = {i: pd.json_normalize(occurences[i]).transpose() for i in occurences}
+
+    master_df = pd.DataFrame([])
+
+    for i in dfs:
+
+
+        dfs[i] = dfs[i].reset_index()
+        dfs[i].columns = ['Date', i]
+        dfs[i]['Date'] = pd.to_datetime(dfs[i]['Date'])
+
+        try:
+            master_df = pd.merge(master_df, dfs[i], on='Date', how='outer')
+        except KeyError:
+            master_df = dfs[i]
         
-            occurences = {i: check_occurences(filter[i]) for i in filter}
+        
+    master_df = master_df.drop(0, axis='index')
+    print(master_df.head())
 
-            with open('./NYT/filtered_data/graphing.json', 'w') as jsonFile:
-                json.dump(occurences, jsonFile, indent=4)
-
-        with open('./NYT/filtered_data/graphing.json', 'r') as jsonFile:
-            occurences = json.load(jsonFile)
-
-        dfs = {i: pd.json_normalize(occurences[i]).transpose() for i in occurences}
-
-        master_df = pd.DataFrame([])
-
-        for i in dfs:
-
-
-            dfs[i] = dfs[i].reset_index()
-            dfs[i].columns = ['Date', i]
-            dfs[i]['Date'] = pd.to_datetime(dfs[i]['Date'])
-
-            try:
-                master_df = pd.merge(master_df, dfs[i], on='Date', how='outer')
-            except KeyError:
-                master_df = dfs[i]
-            
-            
-        master_df = master_df.drop(0, axis='index')
-        print(master_df.head())
-
-        master_df.to_csv('./NYT/dataframes/graphing.csv')
+    master_df.to_csv('./NYT/dataframes/graphing.csv')
