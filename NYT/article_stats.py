@@ -255,5 +255,7 @@ article_data = [Folder(year, 'raw_data') for year in folders]
 if __name__ == '__main__':
     
     article = search(article_data, random.randint(1962, 1973), random.randint(1, 13), 'random')
-
-    print(article.to_dict())
+    try:
+        print(article.to_dict())
+    except AttributeError:
+        pass
