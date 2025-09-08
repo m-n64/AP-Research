@@ -20,7 +20,7 @@ To get this project running, follow these steps:
 
 ## Usage
 
-This will be updated in the future, as I need to be make the code more versatile. It already can has my info, but I need to make the code accept inputs. This will take time, as I am still in school and must finish the rest of my methodology.
+This will be updated in the future, as I need to be make the code more versatile. It already has my info, but I need to make the code accept inputs. This will take time, as I am still in school and must finish the rest of my AP Research methodology.
 
 ## Data Collection Process
 
